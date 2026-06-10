@@ -56,7 +56,7 @@ export async function loader({ context: { appContainer, session }, request, para
       ].filter(({ id }) => state.applicantClientIdsToRenew?.includes(id))
     : [];
 
-  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear) : undefined;
 
   return {
     defaultState: {

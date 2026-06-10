@@ -302,7 +302,7 @@ export async function action({ context: { appContainer, session }, params, reque
     return redirect(getPathById('public/application/$id/children/$childId/parent-or-guardian', params));
   }
 
-  if (!isChildOrYouth(parsedDataResult.data.dateOfBirth, state.context)) {
+  if (!isChildOrYouth(parsedDataResult.data.dateOfBirth, state.applicationYear)) {
     return redirect(getPathById('public/application/$id/children/$childId/cannot-apply-child', params));
   }
 

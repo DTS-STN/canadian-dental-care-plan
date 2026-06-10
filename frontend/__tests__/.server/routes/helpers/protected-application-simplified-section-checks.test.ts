@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import {
@@ -15,6 +15,8 @@ import {
 import { getEnv } from '~/.server/utils/env.utils';
 
 vi.mock('~/.server/utils/env.utils');
+
+const APPLICATION_YEAR = { applicationYearId: 'year-2024', taxYear: '2025', dependentEligibilityEndDate: '2027-06-30' };
 
 describe('protected-application-simplified-section-checks', () => {
   beforeEach(() => {
@@ -326,6 +328,14 @@ describe('protected-application-simplified-section-checks', () => {
   });
 
   describe('isChildInformationSectionCompleted', () => {
+    beforeEach(() => {
+      vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-03-04'));
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     const mockClientApplication = {
       applicantInformation: {
         clientNumber: 'APP-123',
@@ -359,6 +369,10 @@ describe('protected-application-simplified-section-checks', () => {
       expect(
         isChildInformationSectionCompleted(
           {
+            applicationYear: APPLICATION_YEAR,
+            clientApplication: mockClientApplication,
+          },
+          {
             information: {
               firstName: 'Test',
               lastName: 'Child',
@@ -367,27 +381,29 @@ describe('protected-application-simplified-section-checks', () => {
               dateOfBirth: '2010-01-01',
             },
           },
-          mockClientApplication,
         ),
       ).toBe(true);
     });
 
     it('should return false when date of birth is empty string', () => {
       expect(
-        isChildInformationSectionCompleted({
-          information: {
-            firstName: 'Test',
-            lastName: 'Child',
-            hasSocialInsuranceNumber: false,
-            isParent: true,
-            dateOfBirth: '',
+        isChildInformationSectionCompleted(
+          { applicationYear: APPLICATION_YEAR },
+          {
+            information: {
+              firstName: 'Test',
+              lastName: 'Child',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              dateOfBirth: '',
+            },
           },
-        }),
+        ),
       ).toBe(false);
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      expect(isChildInformationSectionCompleted({ applicationYear: APPLICATION_YEAR }, { information: undefined })).toBe(false);
     });
   });
 

@@ -124,13 +124,13 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
     throw redirect(getPathById('protected/application/$id/eligibility-requirements', params));
   }
 
-  const children = validateChildrenStateForReview({ context, childrenState: state.children, state, params });
+  const children = validateChildrenStateForReview({ childrenState: state.children, state, params });
 
   if (applicantInformation === undefined) {
     throw redirect(getPathById('protected/application/$id/renew', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, applicationYear);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/renew', params));
@@ -191,13 +191,12 @@ export function validateProtectedApplicationRenewalChildStateForReview({ params,
 }
 
 interface ValidateChildrenStateForReviewArgs {
-  context: 'intake' | 'renewal';
   childrenState: ProtectedApplicationChildrenState;
-  state: ProtectedApplicationState;
+  state: Pick<ProtectedApplicationState, 'context' | 'clientApplication' | 'applicationYear'>;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ context, childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -217,11 +216,11 @@ function validateChildrenStateForReview({ context, childrenState, state, params 
       throw redirect(getPathById('protected/application/$id/renewal-children/childrens-application', params));
     }
 
-    if (!isChildClientNumberValid(context, state.clientApplication, information.memberId)) {
+    if (!isChildClientNumberValid(state.context, state.clientApplication, information.memberId)) {
       throw redirect(getPathById('protected/application/$id/renewal-children/childrens-application', params));
     }
 
-    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
+    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, state.applicationYear);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
       throw redirect(getPathById('protected/application/$id/renew', params));

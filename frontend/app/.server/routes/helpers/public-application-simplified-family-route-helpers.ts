@@ -133,7 +133,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, applicationYear);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('public/application/$id/your-application', params));
@@ -180,7 +180,7 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
     throw redirect(getPathById('public/application/$id/simplified-family/dental-insurance', params));
   }
 
-  const children = validateChildrenStateForReview({ context, childrenState: state.children, state, params });
+  const children = validateChildrenStateForReview({ childrenState: state.children, state, params });
 
   return {
     ageCategory,
@@ -212,13 +212,12 @@ export function validatePublicApplicationFamilyStateForReview({ params, state }:
 }
 
 interface ValidateChildrenStateForReviewArgs {
-  context: 'intake' | 'renewal';
   childrenState: PublicApplicationChildrenState;
-  state: PublicApplicationState;
+  state: Pick<PublicApplicationState, 'context' | 'clientApplication' | 'applicationYear'>;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ context, childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ childrenState, state, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -238,11 +237,11 @@ function validateChildrenStateForReview({ context, childrenState, state, params 
       throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
     }
 
-    if (!isChildClientNumberValid(context, state.clientApplication, information.memberId)) {
+    if (!isChildClientNumberValid(state.context, state.clientApplication, information.memberId)) {
       throw redirect(getPathById('public/application/$id/simplified-family/childrens-application', params));
     }
 
-    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
+    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, state.applicationYear);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
       throw redirect(getPathById('public/application/$id/your-application', params));

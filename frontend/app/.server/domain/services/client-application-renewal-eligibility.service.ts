@@ -59,7 +59,7 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       dateOfBirth: request.dateOfBirth,
       firstName: request.firstName,
       lastName: request.lastName,
-      applicationYearId: request.applicationYearId,
+      applicationYearId: request.applicationYear.applicationYearId,
       sin: request.sin,
       userId: request.userId,
     });
@@ -67,7 +67,7 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
     this.auditService.createAudit('client-application-renewal-eligibility.basic-info-and-sin.get', { userId: request.userId });
 
     if (clientApplicationDto.isSome()) {
-      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
+      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap(), request.applicationYear);
 
       this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
       return clientApplicationRenewalEligibilityDto;
@@ -97,10 +97,10 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       return { result: 'INELIGIBLE-APPLICANT-SIN-MISMATCH' };
     }
 
-    const applicationYearId = request.applicationYearId;
+    const applicationYear = request.applicationYear;
     this.log.debug('Applicant found for provided basic info and SIN, returning eligibility result based on applicant');
-    this.log.trace('Applicant found for provided basic info and SIN: [%j], applicationYearId: [%s]', applicant, applicationYearId);
-    return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYearId);
+    this.log.trace('Applicant found for provided basic info and SIN: [%j], applicationYear: [%j]', applicant, applicationYear);
+    return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYear);
   }
 
   async getClientApplicationRenewalEligibilityBySin(request: ClientApplicationRenewalEligibilitySinRequestDto): Promise<ClientApplicationRenewalEligibilityDto> {
@@ -108,14 +108,14 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
 
     const clientApplicationDto = await this.clientApplicationService.findClientApplicationBySin({
       sin: request.sin,
-      applicationYearId: request.applicationYearId,
+      applicationYearId: request.applicationYear.applicationYearId,
       userId: request.userId,
     });
 
     this.auditService.createAudit('client-application-renewal-eligibility.sin.get', { userId: request.userId });
 
     if (clientApplicationDto.isSome()) {
-      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap());
+      const clientApplicationRenewalEligibilityDto = await this.clientApplicationRenewalEligibilityDtoMapper.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto.unwrap(), request.applicationYear);
 
       this.log.trace('Returning client application renewal eligibility: [%j]', clientApplicationRenewalEligibilityDto);
       return clientApplicationRenewalEligibilityDto;
@@ -132,10 +132,10 @@ export class DefaultClientApplicationRenewalEligibilityService implements Client
       return { result: 'INELIGIBLE-APPLICANT-NOT-FOUND' };
     }
 
-    const applicationYearId = request.applicationYearId;
+    const applicationYear = request.applicationYear;
     const applicant = applicantOption.unwrap();
     this.log.debug('Applicant found for provided SIN, returning eligibility result based on applicant');
-    this.log.trace('Applicant found for provided SIN: [%j], applicationYearId: [%s]', applicant, applicationYearId);
-    return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYearId);
+    this.log.trace('Applicant found for provided SIN: [%j], applicationYear: [%j]', applicant, applicationYear);
+    return await this.clientApplicationRenewalEligibilityDtoMapper.mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicant, applicationYear);
   }
 }

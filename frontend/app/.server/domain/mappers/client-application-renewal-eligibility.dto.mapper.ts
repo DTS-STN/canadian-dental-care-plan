@@ -14,18 +14,19 @@ export interface ClientApplicationRenewalEligibilityDtoMapper {
   /**
    * Maps an applicant DTO to a client application renewal eligibility DTO.
    * @param applicantDto - The applicant DTO.
-   * @param applicationYearId - The application year ID.
+   * @param applicationYear - The application year object containing `applicationYearId` and `taxYear`.
    * @returns A promise resolving to a `ClientApplicationRenewalEligibilityDto`.
    */
-  mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYearId: string): Promise<ClientApplicationRenewalEligibilityDto>;
+  mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYear: { applicationYearId: string; taxYear: string }): Promise<ClientApplicationRenewalEligibilityDto>;
 
   /**
    * Maps a client application DTO option to a renewal eligibility DTO.
    * @param clientApplicationDto - The client application, or None if not found.
+   * @param applicationYear - The application year object containing `applicationYearId` and `taxYear`.
    * @param applicationCategoryCodeName - The application category, either "New" or "Renewal".
    * @returns A promise resolving to `INELIGIBLE-NO-CLIENT-NUMBERS`, `INELIGIBLE-NO-ELIGIBILITIES`, `INELIGIBLE-NOT-ENROLLED`, or `ELIGIBLE`.
    */
-  mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto, applicationCategoryCodeName?: 'New' | 'Renewal'): Promise<ClientApplicationRenewalEligibilityDto>;
+  mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto, applicationYear: { taxYear: string }, applicationCategoryCodeName?: 'New' | 'Renewal'): Promise<ClientApplicationRenewalEligibilityDto>;
 }
 
 type DefaultClientApplicationRenewalEligibilityDtoMapper_ServerConfig = Pick<ServerConfig, 'ELIGIBILITY_STATUS_CODE_ELIGIBLE' | 'ENROLLMENT_STATUS_CODE_ENROLLED'>;
@@ -48,22 +49,10 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
     this.serverConfig = serverConfig;
   }
 
-  /**
-   * Maps an applicant DTO to a client application renewal eligibility DTO:
-   *
-   * 1. Determine if the applicant is a child or youth at intake using `dateOfBirth`.
-   * 2. If the applicant is a child or youth at intake, return `INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE`.
-   * 3. Otherwise, map the applicant DTO to a client application DTO and delegate to
-   * `mapClientApplicationDtoToClientApplicationRenewalEligibilityDto`.
-   *
-   * @param applicantDto - The applicant DTO.
-   * @param applicationYearId - The application year ID.
-   * @returns A promise resolving to a `ClientApplicationRenewalEligibilityDto`.
-   */
-  async mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYearId: string): Promise<ClientApplicationRenewalEligibilityDto> {
+  async mapApplicantDtoToClientApplicationRenewalEligibilityDto(applicantDto: ApplicantDto, applicationYear: { applicationYearId: string; taxYear: string }): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping applicant dto to client application renewal eligibility dto: [%j]', applicantDto);
 
-    const isChildOrYouthAtIntake = isChildOrYouth(applicantDto.dateOfBirth, 'intake');
+    const isChildOrYouthAtIntake = isChildOrYouth(applicantDto.dateOfBirth, applicationYear);
     this.log.trace('Applicant age category: [%s], date of birth: [%s]', isChildOrYouthAtIntake ? 'child/youth' : 'adult', applicantDto.dateOfBirth);
 
     if (isChildOrYouthAtIntake) {
@@ -71,28 +60,15 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
       return { result: 'INELIGIBLE-APPLICANT-IS-CHILD-OR-YOUTH-AT-INTAKE' };
     }
 
-    const clientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId, typeOfApplication: 'adult' });
-    return await this.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto, 'New');
+    const clientApplicationDto = this.clientApplicationDtoMapper.mapApplicantDtoToClientApplicationDto({ applicantDto, applicationYearId: applicationYear.applicationYearId, typeOfApplication: 'adult' });
+    return await this.mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto, applicationYear, 'New');
   }
 
-  /**
-   * Maps a client application DTO to a renewal eligibility DTO:
-   *
-   * The mapping applies the following rules to determine the renewal eligibility result:
-   *
-   * 1. If the application has a `previousApplication`, return `INELIGIBLE-ALREADY-RENEWED`.
-   * 2. Filter children to those in the `'children'` or `'youth'` age category as of the renewal
-   *    reference date (see `isChildOrYouth`).
-   * 3. Derive client numbers by application type (`'adult'` / `'children'` / `'family'`).
-   *    No client numbers → `INELIGIBLE-NO-CLIENT-NUMBERS`.
-   * 4. Fetch eligibilities for the derived client numbers. Clients with no eligibility record
-   *    are silently omitted; None found at all → `INELIGIBLE-NO-ELIGIBILITIES`.
-   * 5. Filter to clients that are enrolled and eligible. None passing
-   *    → `INELIGIBLE-NOT-ENROLLED`.
-   * 6. Return `ELIGIBLE` with the passing client numbers and an input model of
-   *    `'simplified'` (the application has a valid copay tier code) or `'full'` (missing or unrecognised tier code).
-   */
-  async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(clientApplicationDto: ClientApplicationDto, applicationCategoryCodeName: 'New' | 'Renewal' = 'Renewal'): Promise<ClientApplicationRenewalEligibilityDto> {
+  async mapClientApplicationDtoToClientApplicationRenewalEligibilityDto(
+    clientApplicationDto: ClientApplicationDto,
+    applicationYear: { taxYear: string },
+    applicationCategoryCodeName: 'New' | 'Renewal' = 'Renewal',
+  ): Promise<ClientApplicationRenewalEligibilityDto> {
     this.log.trace('Mapping client application dto to client application renewal eligibility dto: [%j]', clientApplicationDto);
 
     if (clientApplicationDto.previousApplication) {
@@ -100,7 +76,7 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
       return { result: 'INELIGIBLE-ALREADY-RENEWED', clientApplication: clientApplicationDto };
     }
 
-    const clientNumbers = this.listClientNumbers(clientApplicationDto);
+    const clientNumbers = this.listClientNumbers(clientApplicationDto, applicationYear);
     if (clientNumbers.length === 0) {
       this.log.debug('No client numbers found for client application, returning ineligible result');
       return {
@@ -149,8 +125,8 @@ export class DefaultClientApplicationRenewalEligibilityDtoMapper implements Clie
    * Throws on any unrecognised `typeOfApplication` value via the exhaustive `default` branch,
    * which also produces a TypeScript compile error if the union ever gains a new variant.
    */
-  private listClientNumbers(clientApplicationDto: Pick<ClientApplicationDto, 'typeOfApplication' | 'applicantInformation' | 'children'>): ReadonlyArray<string> {
-    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildOrYouth(child.information.dateOfBirth, 'renewal'));
+  private listClientNumbers(clientApplicationDto: Pick<ClientApplicationDto, 'typeOfApplication' | 'applicantInformation' | 'children'>, applicationYear: { taxYear: string }): ReadonlyArray<string> {
+    const eligibleChildren = clientApplicationDto.children.filter((child) => isChildOrYouth(child.information.dateOfBirth, applicationYear));
 
     switch (clientApplicationDto.typeOfApplication) {
       case 'adult': {

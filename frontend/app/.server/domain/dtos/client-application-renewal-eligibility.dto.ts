@@ -113,7 +113,7 @@ export type ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto = Reado
   dateOfBirth: string;
   firstName: string;
   lastName: string;
-  applicationYearId: string;
+  applicationYear: { applicationYearId: string; taxYear: string };
   sin: string;
 
   /** A unique identifier for the user making the request - used for auditing */
@@ -122,7 +122,7 @@ export type ClientApplicationRenewalEligibilityBasicInfoAndSinRequestDto = Reado
 
 export type ClientApplicationRenewalEligibilitySinRequestDto = Readonly<{
   sin: string;
-  applicationYearId: string;
+  applicationYear: { applicationYearId: string; taxYear: string };
 
   /** A unique identifier for the user making the request - used for auditing */
   userId: string;

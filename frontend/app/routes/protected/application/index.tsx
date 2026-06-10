@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, request, para
     const clientApplicationRenewalEligibilityService = appContainer.get(TYPES.ClientApplicationRenewalEligibilityService);
     const clientApplicationRenewalEligibilityResult = await clientApplicationRenewalEligibilityService.getClientApplicationRenewalEligibilityBySin({
       sin: userInfoToken.sin,
-      applicationYearId: applicationYear.applicationYearId,
+      applicationYear: applicationYear,
       userId: userInfoToken.sub,
     });
 

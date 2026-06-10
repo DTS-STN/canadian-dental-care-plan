@@ -54,9 +54,9 @@ export function getTypeOfApplicationSectionCompletionResult(
  * Checks if the personal information section is completed.
  * For youth applicants, livingIndependently must also be completed.
  */
-export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'inputModel' | 'applicantInformation' | 'livingIndependently'>): boolean {
+export function isPersonalInformationSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'inputModel' | 'applicantInformation' | 'livingIndependently' | 'applicationYear'>): boolean {
   if (state.inputModel === undefined || state.applicantInformation === undefined) return false;
-  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear);
 
   if (ageCategory === 'children') {
     return false;
@@ -91,6 +91,6 @@ export function isTaxFilingSectionCompleted(state: Pick<PublicApplicationState, 
 /**
  * Checks if the new or returning member section is completed.
  */
-export function isNewOrReturningMemberSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'applicantInformation' | 'livingIndependently' | 'newOrReturningMember'>): boolean {
+export function isNewOrReturningMemberSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'applicantInformation' | 'livingIndependently' | 'newOrReturningMember' | 'applicationYear'>): boolean {
   return state.context === 'intake' && isPersonalInformationSectionCompleted(state) && state.newOrReturningMember?.isNewOrReturningMember !== undefined;
 }

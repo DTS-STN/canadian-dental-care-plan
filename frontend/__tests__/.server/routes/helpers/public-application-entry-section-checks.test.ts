@@ -14,6 +14,8 @@ const mockClientApplication = {
   children: [],
 };
 
+const APPLICATION_YEAR = { applicationYearId: 'year-2024', taxYear: '2025', dependentEligibilityEndDate: '2027-06-30' };
+
 describe('getTypeOfApplicationSectionCompletionResult', () => {
   describe('intake context', () => {
     it('should return COMPLETED when typeOfApplication is included in allowed types', () => {
@@ -65,18 +67,18 @@ describe('getTypeOfApplicationSectionCompletionResult', () => {
 
 describe('isPersonalInformationSectionCompleted', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime('2026-03-04T12:00:00.000Z');
+    vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-03-04'));
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should return false when inputModel is undefined', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: undefined,
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -92,6 +94,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: undefined,
       }),
@@ -99,7 +102,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   });
 
   it('should return false when both are undefined', () => {
-    expect(isPersonalInformationSectionCompleted({ context: 'intake' })).toBe(false);
+    expect(isPersonalInformationSectionCompleted({ context: 'intake', applicationYear: APPLICATION_YEAR })).toBe(false);
   });
 
   it('should return false when ageCategory is children', () => {
@@ -107,6 +110,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '2012-01-01',
@@ -123,6 +127,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -140,6 +145,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -157,6 +163,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -174,6 +181,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -190,6 +198,7 @@ describe('isPersonalInformationSectionCompleted', () => {
     expect(
       isPersonalInformationSectionCompleted({
         context: 'intake',
+        applicationYear: APPLICATION_YEAR,
         inputModel: 'full',
         applicantInformation: {
           dateOfBirth: '1950-01-01',

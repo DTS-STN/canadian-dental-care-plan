@@ -130,7 +130,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  const ageCategory = getContextualAgeCategoryFromDate(state.clientApplication.dateOfBirth, state.context);
+  const ageCategory = getContextualAgeCategoryFromDate(state.clientApplication.dateOfBirth, state.applicationYear);
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('protected/application/$id/living-independently', params));

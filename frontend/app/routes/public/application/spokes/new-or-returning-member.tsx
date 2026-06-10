@@ -48,7 +48,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   invariant(state.applicantInformation?.dateOfBirth, 'Expected applicantInformation.dateOfBirth to be defined');
-  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear);
 
   return { meta, defaultState: state.newOrReturningMember, userAgeCategory: ageCategory };
 }

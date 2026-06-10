@@ -134,7 +134,7 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/your-application', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, applicationYear);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('public/application/$id/your-application', params));

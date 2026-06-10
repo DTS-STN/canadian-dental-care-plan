@@ -136,7 +136,7 @@ export interface BenefitApplicationStateMapper {
 @injectable()
 export class DefaultBenefitApplicationStateMapper implements BenefitApplicationStateMapper {
   mapApplicationAdultStateToBenefitApplicationDto(applicationAdultState: ApplicationAdultState): BenefitApplicationDto {
-    const ageCategory = getContextualAgeCategoryFromDate(applicationAdultState.applicantInformation.dateOfBirth, applicationAdultState.context);
+    const ageCategory = getContextualAgeCategoryFromDate(applicationAdultState.applicantInformation.dateOfBirth, applicationAdultState.applicationYear);
     if (ageCategory === 'youth' && applicationAdultState.livingIndependently === undefined) {
       throw new Error('Expected livingIndependently to be defined');
     }
@@ -164,7 +164,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }
 
   mapApplicationFamilyStateToBenefitApplicationDto(applicationFamilyState: ApplicationFamilyState): BenefitApplicationDto {
-    const ageCategory = getContextualAgeCategoryFromDate(applicationFamilyState.applicantInformation.dateOfBirth, applicationFamilyState.context);
+    const ageCategory = getContextualAgeCategoryFromDate(applicationFamilyState.applicantInformation.dateOfBirth, applicationFamilyState.applicationYear);
     if (ageCategory === 'youth' && applicationFamilyState.livingIndependently === undefined) {
       throw new Error('Expected livingIndependently to be defined');
     }
@@ -195,7 +195,7 @@ export class DefaultBenefitApplicationStateMapper implements BenefitApplicationS
   }
 
   mapApplicationChildrenStateToBenefitApplicationDto(applicationChildrenState: ApplicationChildrenState): BenefitApplicationDto {
-    const ageCategory = getContextualAgeCategoryFromDate(applicationChildrenState.applicantInformation.dateOfBirth, applicationChildrenState.context);
+    const ageCategory = getContextualAgeCategoryFromDate(applicationChildrenState.applicantInformation.dateOfBirth, applicationChildrenState.applicationYear);
     if (ageCategory === 'youth' && applicationChildrenState.livingIndependently === undefined) {
       throw new Error('Expected livingIndependently to be defined');
     }

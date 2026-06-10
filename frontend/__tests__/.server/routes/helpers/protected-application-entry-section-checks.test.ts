@@ -8,6 +8,8 @@ import {
   isTypeOfApplicationSectionCompleted,
 } from '~/.server/routes/helpers/protected-application-entry-section-checks';
 
+const APPLICATION_YEAR = { applicationYearId: 'year-2024', taxYear: '2025', dependentEligibilityEndDate: '2027-06-30' };
+
 describe('isTypeOfApplicationSectionCompleted', () => {
   it('should return true when typeOfApplication is defined and not delegate', () => {
     expect(isTypeOfApplicationSectionCompleted({ typeOfApplication: 'adult' })).toBe(true);
@@ -24,26 +26,26 @@ describe('isTypeOfApplicationSectionCompleted', () => {
 
 describe('isPersonalInformationSectionCompleted', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime('2026-03-04T12:00:00.000Z');
+    vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-03-04'));
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should return false when applicantInformation is undefined', () => {
-    expect(isPersonalInformationSectionCompleted({ applicantInformation: undefined })).toBe(false);
+    expect(isPersonalInformationSectionCompleted({ applicantInformation: undefined, applicationYear: APPLICATION_YEAR })).toBe(false);
   });
 
   it('should return false when dateOfBirth is missing', () => {
-    expect(isPersonalInformationSectionCompleted({})).toBe(false);
+    expect(isPersonalInformationSectionCompleted({ applicationYear: APPLICATION_YEAR })).toBe(false);
   });
 
   it('should return false when ageCategory is children', () => {
-    // born 2012-01-01 → age 14 on reference date 2026-06-30
+    // born 2012-01-01 → age 14 on reference date 2026-07-01
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '2012-01-01',
           firstName: 'John',
@@ -55,9 +57,10 @@ describe('isPersonalInformationSectionCompleted', () => {
   });
 
   it('should return false when ageCategory is youth and livingIndependently is undefined', () => {
-    // born 2009-01-01 → age 17 on reference date 2026-06-30
+    // born 2009-01-01 → age 17 on reference date 2026-07-01
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '2009-01-01',
           firstName: 'John',
@@ -72,6 +75,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return false when ageCategory is youth and livingIndependently is false', () => {
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '2009-01-01',
           firstName: 'John',
@@ -86,6 +90,7 @@ describe('isPersonalInformationSectionCompleted', () => {
   it('should return true when ageCategory is youth and livingIndependently is true', () => {
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '2009-01-01',
           firstName: 'John',
@@ -98,9 +103,10 @@ describe('isPersonalInformationSectionCompleted', () => {
   });
 
   it('should return true when ageCategory is adults', () => {
-    // born 1990-01-01 → age 36 on reference date 2026-06-30
+    // born 1990-01-01 → age 36 on reference date 2026-07-01
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '1990-01-01',
           firstName: 'John',
@@ -112,9 +118,10 @@ describe('isPersonalInformationSectionCompleted', () => {
   });
 
   it('should return true when ageCategory is seniors', () => {
-    // born 1950-01-01 → age 76 on reference date 2026-06-30
+    // born 1950-01-01 → age 76 on reference date 2026-07-01
     expect(
       isPersonalInformationSectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantInformation: {
           dateOfBirth: '1950-01-01',
           firstName: 'John',
@@ -200,17 +207,17 @@ describe('isTaxFilingSectionCompleted', () => {
 
 describe('isRenewalSelectionCompleted', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime('2026-03-04T12:00:00.000Z');
+    vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-03-04'));
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('should return false when applicantClientIdsToRenew is undefined', () => {
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: undefined,
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -225,6 +232,7 @@ describe('isRenewalSelectionCompleted', () => {
   it('should return false when applicantClientIdsToRenew is empty', () => {
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: [],
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -239,6 +247,7 @@ describe('isRenewalSelectionCompleted', () => {
   it('should return false when dateOfBirth is missing', () => {
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: undefined,
       }),
@@ -246,9 +255,10 @@ describe('isRenewalSelectionCompleted', () => {
   });
 
   it('should return false when ageCategory is children', () => {
-    // born 2012-01-01 → age 14 on reference date 2026-06-30
+    // born 2012-01-01 → age 14 on reference date 2026-07-01
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '2012-01-01',
@@ -261,9 +271,10 @@ describe('isRenewalSelectionCompleted', () => {
   });
 
   it('should return false when ageCategory is youth and livingIndependently is undefined', () => {
-    // born 2009-01-01 → age 17 on reference date 2026-06-30
+    // born 2009-01-01 → age 17 on reference date 2026-07-01
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -279,6 +290,7 @@ describe('isRenewalSelectionCompleted', () => {
   it('should return false when ageCategory is youth and livingIndependently is false', () => {
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -294,6 +306,7 @@ describe('isRenewalSelectionCompleted', () => {
   it('should return true when ageCategory is youth and livingIndependently is true', () => {
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '2009-01-01',
@@ -307,9 +320,10 @@ describe('isRenewalSelectionCompleted', () => {
   });
 
   it('should return true when ageCategory is adults', () => {
-    // born 1990-01-01 → age 36 on reference date 2026-06-30
+    // born 1990-01-01 → age 36 on reference date 2026-07-01
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '1990-01-01',
@@ -322,9 +336,10 @@ describe('isRenewalSelectionCompleted', () => {
   });
 
   it('should return true when ageCategory is seniors', () => {
-    // born 1950-01-01 → age 76 on reference date 2026-06-30
+    // born 1950-01-01 → age 76 on reference date 2026-07-01
     expect(
       isRenewalSelectionCompleted({
+        applicationYear: APPLICATION_YEAR,
         applicantClientIdsToRenew: ['abc'],
         applicantInformation: {
           dateOfBirth: '1950-01-01',

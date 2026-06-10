@@ -188,7 +188,7 @@ export async function action({ context: { appContainer, session }, params, reque
     dateOfBirth: parsedDataResult.data.dateOfBirth,
     socialInsuranceNumber: parsedDataResult.data.socialInsuranceNumber,
   };
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, state.context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, state.applicationYear);
   const showNewOrReturningMember = isNewOrReturningMember({
     ...state,
     applicantInformation,

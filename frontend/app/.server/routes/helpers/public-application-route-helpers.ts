@@ -216,17 +216,16 @@ export function startApplicationState({ applicationYear, session }: StartArgs): 
 }
 
 /**
- * Gets the age category based on the given date string and application context. The reference date for age calculation
- * is determined by the application context: 'intake' uses the current date, while 'renewal' uses the end date of the
- * current coverage period.
+ * Gets the age category based on the given date string and application year. The reference date for age calculation
+ * is determined by the application year, which allows for contextual age categorization.
  *
  * @param date - The date of birth as a string.
- * @param context - The application context, either 'intake' or 'renewal'.
+ * @param applicationYear - The application year data used to determine the reference date for age calculation.
  * @returns The age category as a string.
  */
-export function getContextualAgeCategoryFromDate(date: string, context: 'intake' | 'renewal') {
-  const referenceDate = getAgeCategoryReferenceDate(context);
-  const age = getAgeFromDateString(date, referenceDate);
+export function getContextualAgeCategoryFromDate(date: string, applicationYear: Pick<BaseApplicationYearState, 'taxYear'>) {
+  const referenceDate = getAgeCategoryReferenceDate(applicationYear);
+  const age = getAgeFromDateString(date, referenceDate.toString());
   return getAgeCategoryFromAge(age);
 }
 

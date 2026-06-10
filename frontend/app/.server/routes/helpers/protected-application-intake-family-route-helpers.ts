@@ -123,7 +123,7 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, applicationYear);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/your-application', params));
@@ -165,7 +165,7 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
     throw redirect(getPathById('protected/application/$id/intake-family/dental-insurance', params));
   }
 
-  const children = validateChildrenStateForReview({ context, childrenState: state.children, params });
+  const children = validateChildrenStateForReview({ applicationYear, childrenState: state.children, params });
 
   return {
     ageCategory,
@@ -196,12 +196,12 @@ export function validateProtectedApplicationFamilyStateForReview({ params, state
 }
 
 interface ValidateChildrenStateForReviewArgs {
-  context: 'intake' | 'renewal';
+  applicationYear: ProtectedApplicationState['applicationYear'];
   childrenState: ProtectedApplicationChildrenState;
   params: ApplicationStateParams;
 }
 
-function validateChildrenStateForReview({ context, childrenState, params }: ValidateChildrenStateForReviewArgs) {
+function validateChildrenStateForReview({ applicationYear, childrenState, params }: ValidateChildrenStateForReviewArgs) {
   const children = getChildrenState({ children: childrenState });
 
   if (children.length === 0) {
@@ -221,7 +221,7 @@ function validateChildrenStateForReview({ context, childrenState, params }: Vali
       throw redirect(getPathById('protected/application/$id/intake-family/childrens-application', params));
     }
 
-    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, context);
+    const ageCategory = getContextualAgeCategoryFromDate(information.dateOfBirth, applicationYear);
 
     if (ageCategory === 'adults' || ageCategory === 'seniors') {
       throw redirect(getPathById('protected/application/$id/your-application', params));

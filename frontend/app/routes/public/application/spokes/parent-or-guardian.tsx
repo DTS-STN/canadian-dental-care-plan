@@ -34,7 +34,7 @@ export async function loader({ context: { appContainer, session }, params, reque
   };
 
   invariant(state.applicantInformation, 'Expected state.applicantInformation to be defined');
-  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context);
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear);
 
   if (ageCategory !== 'children' && ageCategory !== 'youth') {
     return redirect(getPathById('public/application/$id/personal-information', params));

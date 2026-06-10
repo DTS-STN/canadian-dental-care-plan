@@ -205,7 +205,7 @@ export async function action({ context: { appContainer, session }, params, reque
       firstName: parsedDataResult.data.firstName,
       lastName: parsedDataResult.data.lastName,
       dateOfBirth: parsedDataResult.data.dateOfBirth,
-      applicationYearId: state.applicationYear.applicationYearId,
+      applicationYear: state.applicationYear,
       sin: parsedDataResult.data.socialInsuranceNumber,
       userId: 'anonymous',
     });
@@ -242,7 +242,7 @@ export async function action({ context: { appContainer, session }, params, reque
     },
   });
 
-  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.context);
+  const ageCategory = getContextualAgeCategoryFromDate(parsedDataResult.data.dateOfBirth, state.applicationYear);
 
   if (ageCategory === 'youth') {
     return redirect(getPathById('public/application/$id/living-independently', params));

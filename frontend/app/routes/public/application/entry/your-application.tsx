@@ -43,7 +43,7 @@ export async function loader({ context: { appContainer, session }, request, para
   const nextRouteId = getInitialApplicationFlowUrl(applicationFlow, params);
   const typeOfApplicationSectionCompletionResult = getTypeOfApplicationSectionCompletionResult(state);
 
-  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.context) : undefined;
+  const ageCategory = state.applicantInformation?.dateOfBirth ? getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear) : undefined;
   const shouldSkipNewOrReturningMemberStep = shouldSkipNewOrReturningMember(state);
   const showNewOrReturningMemberSection = !shouldSkipNewOrReturningMemberStep;
 

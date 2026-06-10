@@ -1,6 +1,5 @@
 import type { PickDeep } from 'type-fest';
 
-import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import { isChildClientNumberValid, isChildOrYouth } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { PublicApplicationChildState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
 import { getEnv } from '~/.server/utils/env.utils';
@@ -106,14 +105,14 @@ export function isDentalBenefitsSectionCompleted(state: PickDeep<PublicApplicati
 /**
  * Checks if the child information section is completed for simplified application.
  */
-export function isChildInformationSectionCompleted(context: 'intake' | 'renewal', child: Pick<PublicApplicationChildState, 'information'>, clientApplication?: ClientApplicationRenewalEligibleDto): boolean {
+export function isChildInformationSectionCompleted(state: Pick<PublicApplicationState, 'context' | 'applicationYear' | 'clientApplication'>, child: Pick<PublicApplicationChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
   return (
     child.information !== undefined && //
     child.information.isParent &&
     isValidDateString(child.information.dateOfBirth) &&
-    isChildOrYouth(child.information.dateOfBirth, context) &&
-    isChildClientNumberValid(context, clientApplication, child.information.memberId)
+    isChildOrYouth(child.information.dateOfBirth, state.applicationYear) &&
+    isChildClientNumberValid(state.context, state.clientApplication, child.information.memberId)
   );
 }
 

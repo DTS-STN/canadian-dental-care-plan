@@ -11,12 +11,12 @@ export function isTypeOfApplicationSectionCompleted(state: Pick<ProtectedApplica
 /**
  * Checks if the personal information section is completed.
  */
-export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicantInformation' | 'livingIndependently'>): boolean {
+export function isPersonalInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicantInformation' | 'applicationYear' | 'livingIndependently'>): boolean {
   if (!state.applicantInformation?.dateOfBirth) {
     return false;
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear);
 
   if (ageCategory === 'children') {
     return false;
@@ -33,7 +33,7 @@ export function isPersonalInformationSectionCompleted(state: Pick<ProtectedAppli
 /**
  * Checks if the new or returning member section is completed.
  */
-export function isNewOrReturningMemberSectionCompleted(state: Pick<ProtectedApplicationState, 'context' | 'applicantInformation' | 'livingIndependently' | 'newOrReturningMember'>): boolean {
+export function isNewOrReturningMemberSectionCompleted(state: Pick<ProtectedApplicationState, 'context' | 'applicantInformation' | 'applicationYear' | 'livingIndependently' | 'newOrReturningMember'>): boolean {
   return state.context === 'intake' && isPersonalInformationSectionCompleted(state) && state.newOrReturningMember?.isNewOrReturningMember !== undefined;
 }
 
@@ -58,12 +58,12 @@ export function isTaxFilingSectionCompleted(state: Pick<ProtectedApplicationStat
 /**
  * Checks if the renewal selection section is completed.
  */
-export function isRenewalSelectionCompleted(state: Pick<ProtectedApplicationState, 'applicantClientIdsToRenew' | 'applicantInformation' | 'livingIndependently'>): boolean {
+export function isRenewalSelectionCompleted(state: Pick<ProtectedApplicationState, 'applicantClientIdsToRenew' | 'applicantInformation' | 'applicationYear' | 'livingIndependently'>): boolean {
   if (!state.applicantClientIdsToRenew || state.applicantClientIdsToRenew.length === 0 || !state.applicantInformation) {
     return false;
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, 'renewal');
+  const ageCategory = getContextualAgeCategoryFromDate(state.applicantInformation.dateOfBirth, state.applicationYear);
 
   if (ageCategory === 'children') {
     return false;

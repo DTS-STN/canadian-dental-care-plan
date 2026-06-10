@@ -124,7 +124,7 @@ export function validateProtectedApplicationIntakeAdultStateForReview({ params, 
     throw redirect(getPathById('protected/application/$id/your-application', params));
   }
 
-  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, context);
+  const ageCategory = getContextualAgeCategoryFromDate(applicantInformation.dateOfBirth, applicationYear);
 
   if (ageCategory === 'children') {
     throw redirect(getPathById('protected/application/$id/your-application', params));

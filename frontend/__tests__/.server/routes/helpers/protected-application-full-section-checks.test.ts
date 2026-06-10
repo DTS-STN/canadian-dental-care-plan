@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   isAddressSectionCompleted,
@@ -14,6 +14,8 @@ import {
 import { getEnv } from '~/.server/utils/env.utils';
 
 vi.mock('~/.server/utils/env.utils');
+
+const APPLICATION_YEAR = { applicationYearId: 'year-2024', taxYear: '2025', dependentEligibilityEndDate: '2027-06-30' };
 
 describe('protected-application-full-section-checks', () => {
   beforeEach(() => {
@@ -236,17 +238,28 @@ describe('protected-application-full-section-checks', () => {
   });
 
   describe('isChildInformationSectionCompleted', () => {
+    beforeEach(() => {
+      vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-03-04'));
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
     it('should return true when child information has date of birth', () => {
       expect(
-        isChildInformationSectionCompleted({
-          information: {
-            firstName: 'Test',
-            lastName: 'Child',
-            hasSocialInsuranceNumber: false,
-            isParent: true,
-            dateOfBirth: '2010-01-01',
+        isChildInformationSectionCompleted(
+          { applicationYear: APPLICATION_YEAR },
+          {
+            information: {
+              firstName: 'Test',
+              lastName: 'Child',
+              hasSocialInsuranceNumber: false,
+              isParent: true,
+              dateOfBirth: '2010-01-01',
+            },
           },
-        }),
+        ),
       ).toBe(true);
     });
 
@@ -260,11 +273,11 @@ describe('protected-application-full-section-checks', () => {
           dateOfBirth: '',
         },
       };
-      expect(isChildInformationSectionCompleted(child)).toBe(false);
+      expect(isChildInformationSectionCompleted({ applicationYear: APPLICATION_YEAR }, child)).toBe(false);
     });
 
     it('should return false when information is undefined', () => {
-      expect(isChildInformationSectionCompleted({ information: undefined })).toBe(false);
+      expect(isChildInformationSectionCompleted({ applicationYear: APPLICATION_YEAR }, { information: undefined })).toBe(false);
     });
   });
 

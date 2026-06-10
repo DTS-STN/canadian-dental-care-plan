@@ -77,13 +77,13 @@ export function isMaritalStatusSectionCompleted(state: Pick<ProtectedApplication
 /**
  * Checks if the child information section is completed for intake application.
  */
-export function isChildInformationSectionCompleted(child: Pick<ProtectedApplicationChildState, 'information'>): boolean {
+export function isChildInformationSectionCompleted(state: Pick<ProtectedApplicationState, 'applicationYear'>, child: Pick<ProtectedApplicationChildState, 'information'>): boolean {
   // TODO: Check with age category and live independently status
   return (
     child.information !== undefined && //
     child.information.isParent &&
     isValidDateString(child.information.dateOfBirth) &&
-    isChildOrYouth(child.information.dateOfBirth, 'intake')
+    isChildOrYouth(child.information.dateOfBirth, state.applicationYear)
   );
 }
 

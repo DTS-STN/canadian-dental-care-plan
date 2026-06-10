@@ -3,9 +3,9 @@ import type { PickDeep, ReadonlyDeep } from 'type-fest';
 
 import type { ClientApplicationRenewalEligibleDto } from '~/.server/domain/dtos';
 import type { DeclaredChange } from '~/.server/routes/helpers/declared-change-type';
+import { getCoveragePeriodFromTaxYear } from '~/.server/utils/coverage.utils';
 import { getEnv } from '~/.server/utils/env.utils';
 import type { EligibilityType } from '~/components/eligibility';
-import { expectDefined } from '~/utils/assert-utils';
 import { getAgeFromDateString } from '~/utils/date-utils';
 import { formatSin, isValidSin } from '~/utils/sin-utils';
 
@@ -213,42 +213,40 @@ export function getAgeCategoryFromAge(age: number): AgeCategory {
 }
 
 /**
- * Gets the reference date for calculating the age category based on the context (intake or renewal).
- * In the "intake" context, the reference date is today's date, as the age is calculated at the time of application submission.
- * In the "renewal" context, the reference date is the end of the current coverage year (June 30th).
- * If the current month is July or later, the coverage year ends on June 30th of the next year; otherwise, it ends on June 30th of the current year.
+ * Returns the age evaluation date for dependant age validation.
  *
- * @param context - The context for which to get the age category reference date ('intake' or 'renewal').
- * @returns The reference date as a string in YYYY-MM-DD format.
+ * The reference date is determined by comparing today against the coverage
+ * start date of the application year (July 1 of `taxYear + 1`):
+ * - If today is **before** the coverage start date, the day before the coverage start date is used.
+ * - If today is **on or after** the coverage start date, today is used.
+ *
+ * @example
+ * // taxYear '2025' → coverageStartDate is 2026-07-01
+ * // called on 2026-06-09 (before coverage start) → returns 2026-06-30
+ * // called on 2026-07-15 (after coverage start)  → returns 2026-07-15
+ *
+ * @param applicationYear - An object containing the `taxYear` string (e.g. `'2025'`).
+ * @returns The age evaluation date as a `Temporal.PlainDate`.
  */
-export function getAgeCategoryReferenceDate(context: 'intake' | 'renewal'): string {
-  const now = new Date();
-
-  if (context === 'intake') {
-    // "intake" context age reference date is today's date,
-    // as the age is calculated at the time of application submission.
-    const [date] = now.toISOString().split('T');
-    return expectDefined(date, `Expected date to be defined for context [${context}] and current date [${now.toISOString()}]`);
-  }
-
-  // "renewal" context age reference date is the end of the current coverage year (June 30th)
-  // If the current month is July or later, the coverage year ends on June 30th of the next year;
-  // otherwise, it ends on June 30th of the current year.
-  const coverageEndYear = now.getUTCFullYear() + (now.getUTCMonth() >= 6 ? 1 : 0);
-  return `${coverageEndYear}-06-30`;
+export function getAgeCategoryReferenceDate(applicationYear: Pick<BaseApplicationYearState, 'taxYear'>): Temporal.PlainDate {
+  const coveragePeriod = getCoveragePeriodFromTaxYear(applicationYear.taxYear);
+  const today = Temporal.Now.plainDateISO('UTC');
+  const isTodayBeforeCoverageStart = Temporal.PlainDate.compare(today, coveragePeriod.startDate) < 0;
+  return isTodayBeforeCoverageStart ? coveragePeriod.startDate.add({ days: -1 }) : today;
 }
 
 /**
- * Determines if the individual is categorized as a child or youth based on their date of birth and the context (intake
- * or renewal).
+ * Determines if the individual is categorized as a child or youth based on their date of birth and
+ * the reference date derived from the application year. This function is used to determine eligibility
+ * for certain application types and benefits that are specific to children and youth.
  *
  * @param dateOfBirth - The date of birth of the individual.
- * @param context - The context of the application ('intake' or 'renewal').
+ * @param applicationYear - The application year data used to determine the reference date for age calculation.
  * @returns A boolean indicating whether the individual is a child or youth.
  */
-export function isChildOrYouth(dateOfBirth: string, context: 'intake' | 'renewal'): boolean {
-  const referenceDate = getAgeCategoryReferenceDate(context);
-  const ageCategory = getAgeCategoryFromDateString(dateOfBirth, referenceDate);
+export function isChildOrYouth(dateOfBirth: string, applicationYear: Pick<BaseApplicationYearState, 'taxYear'>): boolean {
+  const referenceDate = getAgeCategoryReferenceDate(applicationYear);
+  const ageCategory = getAgeCategoryFromDateString(dateOfBirth, referenceDate.toString());
   return ageCategory === 'children' || ageCategory === 'youth';
 }
 
