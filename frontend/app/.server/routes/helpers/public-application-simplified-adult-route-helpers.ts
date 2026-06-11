@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 
 import { invariant } from '@dts-stn/invariant';
+import validator from 'validator';
 
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication } from '~/.server/routes/helpers/base-application-route-helpers';
@@ -148,6 +149,10 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
+  if (homeAddress === undefined) {
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+  }
+
   if (mailingAddress === undefined) {
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
@@ -156,15 +161,22 @@ export function validatePublicRenewAdultStateForReview({ params, state }: Valida
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  const resolvedSunLifePreferredMethod = communicationPreferences.hasChanged ? communicationPreferences.value.preferredMethod : clientApplication.communicationPreferences.preferredMethodSunLife;
+  if (resolvedSunLifePreferredMethod === undefined) {
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 
-  if (
-    communicationPreferences.hasChanged === false &&
-    (clientApplication.communicationPreferences.preferredMethodSunLife === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada === COMMUNICATION_METHOD_GC_DIGITAL_ID) &&
-    !(clientApplication.contactInformation.email && clientApplication.contactInformation.emailVerified)
-  ) {
+  const resolvedGovernmentOfCanadaPreferredMethod = communicationPreferences.hasChanged ? communicationPreferences.value.preferredNotificationMethod : clientApplication.communicationPreferences.preferredMethodGovernmentOfCanada;
+  if (resolvedGovernmentOfCanadaPreferredMethod === undefined) {
+    throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
+  }
+
+  const isEmailRequired = resolvedSunLifePreferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || resolvedGovernmentOfCanadaPreferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID;
+  const resolvedEmail = communicationPreferences.hasChanged ? email : clientApplication.contactInformation.email;
+  const resolvedEmailVerified = communicationPreferences.hasChanged ? emailVerified : clientApplication.contactInformation.emailVerified;
+  const hasValidVerifiedEmail = resolvedEmail !== undefined && validator.isEmail(resolvedEmail) && resolvedEmailVerified === true;
+
+  if (isEmailRequired && !hasValidVerifiedEmail) {
     throw redirect(getPathById('public/application/$id/simplified-adult/contact-information', params));
   }
 

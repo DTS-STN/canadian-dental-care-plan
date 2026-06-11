@@ -1,5 +1,7 @@
 import { redirect } from 'react-router';
 
+import validator from 'validator';
+
 import { createLogger } from '~/.server/logging';
 import { getAllowedTypeOfApplication, isChildClientNumberValid, maritalStatusHasPartner } from '~/.server/routes/helpers/base-application-route-helpers';
 import type { ApplicationStateParams, PublicApplicationChildrenState, PublicApplicationState } from '~/.server/routes/helpers/public-application-route-helpers';
@@ -148,19 +150,26 @@ export function validatePublicApplicationFullChildStateForReview({ params, state
     throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
-  if (phoneNumber === undefined) {
+  if (phoneNumber?.hasChanged !== true) {
     throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
-  if (mailingAddress === undefined) {
+  if (homeAddress?.hasChanged !== true) {
     throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
-  if (communicationPreferences === undefined) {
+  if (mailingAddress?.hasChanged !== true) {
     throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if (communicationPreferences?.hasChanged !== true) {
+    throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
+  }
+
+  const isEmailRequired = communicationPreferences.value.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID;
+  const hasValidVerifiedEmail = email !== undefined && validator.isEmail(email) && emailVerified === true;
+
+  if (isEmailRequired && !hasValidVerifiedEmail) {
     throw redirect(getPathById('public/application/$id/full-children/parent-or-guardian', params));
   }
 
