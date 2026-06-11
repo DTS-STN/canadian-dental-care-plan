@@ -19,7 +19,7 @@ env:
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
-    if: ${{ github.repository == 'DTS-STN/canadian-dental-care-plan' }}
+    if: ${{ github.repository == 'STN-DTS/canadian-dental-care-plan' }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - id: frontend
