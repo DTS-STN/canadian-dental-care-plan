@@ -29,6 +29,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import { getPathById } from '~/utils/route-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useClientEnv } from '~/root';
 
 function getRouteFromApplicationFlow(applicationFlow: ApplicationFlow) {
   switch (applicationFlow) {
@@ -67,7 +68,6 @@ export async function loader({ context: { appContainer, session }, params, reque
   const languages = appContainer.get(TYPES.LanguageService).listAndSortLocalizedLanguages(locale);
   const gcCommunicationMethods = appContainer.get(TYPES.GCCommunicationMethodService).listLocalizedGCCommunicationMethods(locale);
   const sunLifeCommunicationMethods = appContainer.get(TYPES.SunLifeCommunicationMethodService).listLocalizedSunLifeCommunicationMethods(locale);
-  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID, COMMUNICATION_METHOD_GC_DIGITAL_ID, COMMUNICATION_METHOD_GC_MAIL_ID } = appContainer.get(TYPES.ServerConfig);
 
   return {
     defaultState: state.communicationPreferences?.value,
@@ -75,9 +75,6 @@ export async function loader({ context: { appContainer, session }, params, reque
     languages,
     gcCommunicationMethods,
     sunLifeCommunicationMethods,
-    COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID,
-    COMMUNICATION_METHOD_GC_DIGITAL_ID,
-    COMMUNICATION_METHOD_GC_MAIL_ID,
     meta,
   };
 }
@@ -147,7 +144,8 @@ export async function action({ context: { appContainer, session }, params, reque
 
 export default function ApplicationSpokeCommunicationPreferences({ loaderData, params }: Route.ComponentProps) {
   const { t } = useTranslation(['protectedApplicationSpokes', 'protectedApplication']);
-  const { defaultState, applicationFlow, sunLifeCommunicationMethods, COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = loaderData;
+  const { defaultState, applicationFlow, sunLifeCommunicationMethods } = loaderData;
+  const { COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID } = useClientEnv();
 
   const navigate = useNavigate();
   const fetcher = useFetcher<typeof action>();
