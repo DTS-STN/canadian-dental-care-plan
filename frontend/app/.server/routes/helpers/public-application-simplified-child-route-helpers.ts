@@ -163,7 +163,7 @@ export function validatePublicApplicationSimplifiedChildStateForReview({ params,
     throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
   }
 
-  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
+  if ((communicationPreferences.value?.preferredMethod === COMMUNICATION_METHOD_SUNLIFE_EMAIL_ID || communicationPreferences.value?.preferredNotificationMethod === COMMUNICATION_METHOD_GC_DIGITAL_ID) && !emailVerified) {
     throw redirect(getPathById('public/application/$id/simplified-children/parent-or-guardian', params));
   }
 
