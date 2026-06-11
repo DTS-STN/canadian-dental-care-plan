@@ -30,6 +30,7 @@ import { mergeMeta } from '~/utils/meta-utils';
 import type { RouteHandleData } from '~/utils/route-utils';
 import { getPathById } from '~/utils/route-utils';
 import { getTitleMetaTags } from '~/utils/seo-utils';
+import { useSafeSubmit } from '~/hooks/use-safe-submit';
 
 const CHECKBOX_VALUE = {
   yes: 'yes',
@@ -126,30 +127,30 @@ export default function NewAdultSubmit({ loaderData, params }: Route.ComponentPr
   const { state, payload } = loaderData;
   const { t } = useTranslation('applicationFullAdult');
   const fetcher = useFetcher<typeof action>();
-  const { isSubmitting } = useFetcherSubmissionState(fetcher);
+  const { isSubmitting: isFetcherSubmitting } = useFetcherSubmissionState(fetcher);
   const errors = fetcher.data?.errors;
 
   const hCaptchaEnabled = useFeature('hcaptcha');
   const { captchaRef, onLoad, sitekey } = useHCaptcha();
 
-  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement, SubmitEvent>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-
-    if (hCaptchaEnabled && captchaRef.current) {
-      try {
-        const response = captchaRef.current.getResponse();
-        formData.set('h-captcha-response', response);
-      } catch {
-        /* intentionally ignore and proceed with submission */
-      } finally {
-        captchaRef.current.resetCaptcha();
+  const { isSubmitLocked, handleSubmit } = useSafeSubmit({
+    onSubmit: async (event, formData) => {
+      if (hCaptchaEnabled && captchaRef.current) {
+        try {
+          const response = captchaRef.current.getResponse();
+          formData.set('h-captcha-response', response);
+        } catch {
+          /* intentionally ignore and proceed with submission */
+        } finally {
+          captchaRef.current.resetCaptcha();
+        }
       }
-    }
 
-    await fetcher.submit(formData, { method: 'POST' });
-  }
+      await fetcher.submit(formData, { method: 'POST' });
+    },
+  });
 
+  const isSubmitting = isFetcherSubmitting || isSubmitLocked;
   const eligibilityLink = <InlineLink to={t(($) => $.submit.doYouQualifyHref)} className="external-link" newTabIndicator target="_blank" />;
 
   return (
